@@ -1,27 +1,19 @@
-from flask import Flask, redirect, render_template, request
-from werkzeug.security import generate_password_hash
-from config import User
+from peewee import SqliteDatabase, Model, IntegerField, CharField, TextField
+
+db = SqliteDatabase("db.sqlite")
 
 
-app = Flask(__name__)
+class User(Model):
+    id = IntegerField(primary_key=True)
+    name = CharField(unique=True)
+    email = CharField(unique=True)
+    password = TextField()
+    gender = CharField()
+    store = CharField()
+
+    class Meta:
+        database = db
+        table_name = "users"
 
 
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    if request.method == "POST":
-        User.create(
-            name=request.form["name"],
-            email=request.form["email"],
-            password=generate_password_hash(request.form["password"]),
-        )
-        return render_template("index.html")
-    return render_template("register.html")
-
-
-@app.route("/")
-def index():
-    return render_template("index.html")
-
-
-if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=8000, debug=True)
+db.create_tables([User])
