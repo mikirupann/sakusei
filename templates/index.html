@@ -3,9 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>MessageBOX</title>
 </head>
 <body>
-    <h1>アカウント登録完了</h1>
+    {% for message in get_flashed_messages() %}
+        <h1>{{ message }}</h1>
+    {% endfor %}
+    {% if current_user.is_authenticated %}
+        <p>{{ current_user.name }} </p>
+    {% else %}
+        <h1>ログインしていません</h1>
+    {% endif %}
 </body>
 </html>
