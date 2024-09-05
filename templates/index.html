@@ -1,18 +1,54 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MessageBOX</title>
-</head>
-<body>
-    {% for message in get_flashed_messages() %}
-        <h1>{{ message }}</h1>
-    {% endfor %}
-    {% if current_user.is_authenticated %}
-        <p>{{ current_user.name }} </p>
-    {% else %}
-        <h1>ログインしていません</h1>
+<header>
+    <nav>
+        <ul>
+            {% if current_user.is_authenticated %}
+                <p>{{ current_user.name }}ジロリアンログイン中 </p>
+            {% else %}
+                <p>ログインしていません</p>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
+
+{% extends "base.html" %}
+{% block content %}
+    
+    {% if current_user.is_authenticated %}  {# ログインしている場合に表示 #}
+        
+            <h2>つぶやこう！</h2>
+            <form action="{{ url_for('index') }}" method="post">
+                <label for="message">何してる？:</label>
+                <br>
+                <div class="tubuyaki">
+                    <textarea name="content" id="message" placeholder="例:混雑状況(現在何人待ち)・つけ麺やっているのか？・可愛い店員いるのか？"></textarea>
+                </div>
+                <br>
+                <input type="submit" value="投稿" />
+            </form>
     {% endif %}
-</body>
-</html>
+
+    <h2>一覧</h2>
+    <ul>
+        {% for message in messages %}
+        <div class="message">
+            <li>
+                <img src="http://www.gravatar.com/avatar/986:gk-KN7SEol-lyPV3QhoPsO9kSzOR3KJOCKixCrmvJx0RQxuYedtzAIdeecfU3haY" alt="" class="avatar">
+                {{ message.user.name }} {{ message.pub_date }}
+                {% if message.user == current_user %}
+                    <form action="{{ url_for('delete', message_id=message.id) }}" method="post" style="display:inline;">
+                        <input type="submit" value="削除" onclick="if(!confirm('このメッセージを削除しますか？')) return false">
+                    </form>
+                {% endif %}
+                <div class="message-content">
+                    <a href="{{ url_for('show', message_id=message.id) }}"></a>
+                        {{ message.content }}
+                    </a>
+                    {% if message.messages.count() > 0 %}
+                        {{ message.messages.count() }}件の返信
+                    {% endif %}
+                </div>
+            </li>
+        </div>
+        {% endfor %}
+    </ul>
+{% endblock %}

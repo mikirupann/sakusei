@@ -1,70 +1,60 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登録</title>
-</head>
-<body>
-    {% for message in get_flashed_messages() %}
-            <p>{{ message }}</p>
-    {% endfor %}
-    
-    <h2>アカウント登録</h2>
-    <form action="" method="post">
-        <label for="name">お名前:</label>
-        <br>
-        <input type="text" name="name" id="name" placeholder="ニックネーム可">
-        <br>
-        <label for="password">パスワード:</label>
-        <br>
-        <input type="password" name="password" id="password" placeholder="ログインID">
-        <br>
-        <label for="email">メールアドレス:</label>
-        <br>
-        <input type="email" name="email" id="email">
-        <br>
-        <label for="gender">性別:</label>
-        <input type="radio" name="gender" id="gender" value="男性"> 男性
-        <input type="radio" name="gender" id="gender" value="女性"> 女性
-        <input type="radio" name="gender" id="gender" value="その他"> その他
-        <br>
-        <label for="store">地元二郎店舗:</label>
-        <select name="store" id="store">
-            <option value="該当なし">該当なし</option>
-            <option value="三田本店">三田本店</option>
-            <option value="ひばりヶ丘駅前店">ひばりヶ丘駅前</option>
-            <option value="八王子野猿街道店2店">八王子野猿街道店2店</option>
-            <option value="横浜関内店">横浜関内店</option>
-            <option value="中山駅前店">中山駅前店</option>
-            <option value="神田神保町店">神田神保町店</option>
-            <option value="越谷店">越谷店</option>
-            <option value="西台駅前店">西台駅前店</option>
-            <option value="京成大久保店">京成大久保店</option>
-            <option value="目黒店">目黒店</option>
-            <option value="松戸駅前">松戸駅前</option>
-            <option value="環七一之江店">環七一之江店</option>
-            <option value="小岩店">小岩店</option>
-            <option value="府中店">府中店</option>
-            <option value="桜台駅前店">桜台駅前店</option>
-            <option value="上野毛店">上野毛店</option>
-            <option value="亀戸店">亀戸店</option>
-            <option value="千葉店">千葉店</option>
-            <option value="品川店">品川店</option>
-            <option value="仙台店">仙台店</option>
-            <option value="京急川崎店">京急川崎店</option>
-            <option value="千住大橋駅前店">千住大橋駅前店</option>
-            <option value="湘南藤沢店">湘南藤沢店</option>
-            <option value="荻窪店">荻窪店</option>
-            <option value="環七新新代田店">環七新新代田店</option>
-            <option value="川越店">川越店</option>
-            <option value="めじろ台店">めじろ台店</option>
-            <option value="会津若松駅前店">会津若松駅前店</option>
-            <option value="新潟店">新潟店</option>
-            <option value="仙川店">仙川店</option>
-        </select>
-        <br>
-        <input type="submit" value="登録">
-    </form>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+        
+        <h2>アカウント登録</h2>
+        <form action="" method="post">
+            <label for="name">お名前:</label>
+            <br>
+            <input type="text" name="name" id="name" placeholder="ニックネーム可">
+            <br>
+            <label for="password">パスワード:</label>
+            <br>
+            <input type="password" name="password" id="password" placeholder="ログインID">
+            <br>
+            <label for="email">メールアドレス:</label>
+            <br>
+            <input type="email" name="email" id="email">
+            <br>
+            <label for="gender">性別:</label>
+            <input type="radio" name="gender" id="gender" value="男性"> 男性
+            <input type="radio" name="gender" id="gender" value="女性"> 女性
+            <input type="radio" name="gender" id="gender" value="その他"> その他
+            <br>
+            <label for="store">地元二郎店舗:</label>
+            <select name="store" id="store">
+                <option value="該当なし">該当なし</option>
+                <option value="三田本店">三田本店</option>
+                <option value="ひばりヶ丘駅前店">ひばりヶ丘駅前</option>
+                <option value="八王子野猿街道店2店">八王子野猿街道店2店</option>
+                <option value="横浜関内店">横浜関内店</option>
+                <option value="中山駅前店">中山駅前店</option>
+                <option value="神田神保町店">神田神保町店</option>
+                <option value="越谷店">越谷店</option>
+                <option value="西台駅前店">西台駅前店</option>
+                <option value="京成大久保店">京成大久保店</option>
+                <option value="目黒店">目黒店</option>
+                <option value="松戸駅前">松戸駅前</option>
+                <option value="環七一之江店">環七一之江店</option>
+                <option value="小岩店">小岩店</option>
+                <option value="府中店">府中店</option>
+                <option value="桜台駅前店">桜台駅前店</option>
+                <option value="上野毛店">上野毛店</option>
+                <option value="亀戸店">亀戸店</option>
+                <option value="千葉店">千葉店</option>
+                <option value="品川店">品川店</option>
+                <option value="仙台店">仙台店</option>
+                <option value="京急川崎店">京急川崎店</option>
+                <option value="千住大橋駅前店">千住大橋駅前店</option>
+                <option value="湘南藤沢店">湘南藤沢店</option>
+                <option value="荻窪店">荻窪店</option>
+                <option value="環七新新代田店">環七新新代田店</option>
+                <option value="川越店">川越店</option>
+                <option value="めじろ台店">めじろ台店</option>
+                <option value="会津若松駅前店">会津若松駅前店</option>
+                <option value="新潟店">新潟店</option>
+                <option value="仙川店">仙川店</option>
+            </select>
+            <br>
+            <input type="submit" value="登録">
+        </form>
+{% endblock %}
