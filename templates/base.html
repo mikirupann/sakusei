@@ -9,13 +9,13 @@
 
 <body>
     <div class="page">
-        <h1><a href="{{ url_for('index') }}">ジロッター</a></h1>
+        <h1><a href="{{ url_for('index') }}">二郎ッター</a></h1>
         <div class="metanav">
             {% if not current_user.is_authenticated %}
-                <a href="{{ url_for('login') }}">ログイン</a>
-                <a href="{{ url_for('register') }}">新規登録</a>
+                <button class="btn"><a href="{{ url_for('login') }}">ログイン</a></button>
+                <button class="btn"><a href="{{ url_for('register') }}">新規登録</a></button>
             {% else %}
-                <a href="{{ url_for('unregister') }}" onclick="if(!confirm('本当に削除していいですか？')) return false">Unregister</a>
+                <a href="{{ url_for('unregister') }}" onclick="if(!confirm('本当に削除していいですか？')) return false">退会</a>
                 <a href="{{ url_for('logout') }}">ログアウト</a>
             {% endif %}
         </div>

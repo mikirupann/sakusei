@@ -68,10 +68,12 @@ def login():
         if user is not None and check_password_hash(user.password, request.form["password"]):
             login_user(user)
             flash(f" {user.name} さんHello!!")
-            return redirect(url_for("index"))
+            return render_template("selection.html")
+            # return redirect(url_for("login"))
         # NGならフラッシュメッセージを設定
         flash("認証に失敗しました")
-    return render_template("login.html")
+    return render_template("selection.html")
+    # return render_template("login.html")
 
 
 # ログアウト処理
@@ -136,6 +138,11 @@ def show(message_id):
 def reply(message_id):
     Message.create(user=current_user, content=request.form["content"], reply_to=message_id)
     return redirect(url_for("show", message_id=message_id))
+
+
+@app.route("/selection")
+def selection():
+    return render_template("selection.html")
 
 
 if __name__ == "__main__":

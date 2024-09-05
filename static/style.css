@@ -2,7 +2,7 @@
 
 body {
     font-family: sans-serif;
-    background: #eee;
+    background-image: url('/ra-men.jpg');  
 }
 
 a:link,
@@ -19,8 +19,10 @@ h2 {
 
 h1,
 h2 {
-    font-family: 'Georgia', serif;
+    font-family: 'Arial', 'ヒラギノ角ゴ Pro W3', '游ゴシック', sans-serif;
     margin: 0;
+    font-weight: bold; /* 太字に設定 */
+    color: black; /* テキストの色を黒に設定 */
 }
 
 h1 {
@@ -37,7 +39,7 @@ h2 {
     width: 35em;
     border: 5px solid #ccc;
     padding: 0.8em;
-    background: white;
+    background: #ffd900;
 }
 
 .page form {
