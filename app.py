@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from peewee import IntegrityError
 from config import User, Message
 
+
 app = Flask(__name__)
 app.secret_key = "secret"  # 秘密鍵
 login_manager = LoginManager()
@@ -22,24 +23,21 @@ def unauthorized_handler():
     return redirect(url_for("login"))
 
 
-# ユーザー登録フォームの表示
+# ユーザー登録フォームの表示・登録処理
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        if (
-            not request.form["name"]
-            or not request.form["password"]
-            or not request.form["email"]
-            or not request.form["gender"]
-        ):
-            flash("未入力の項目があります。")
+        # データの検証
+        if not request.form["name"] or not request.form["password"] or not request.form["email"]:
+            flash("※未入力の項目があります※")
             return redirect(request.url)
         if User.select().where(User.name == request.form["name"]):
-            flash("その名前はすでに使われています。")
+            flash("※その名前はすでに使われています※")
             return redirect(request.url)
         if User.select().where(User.email == request.form["email"]):
-            flash("そのメールアドレスはすでに登録されています。")
+            flash("※そのメールアドレスはすでに使われています※")
             return redirect(request.url)
+        # ユーザー登録
         try:
             User.create(
                 name=request.form["name"],
@@ -48,38 +46,37 @@ def register():
                 gender=request.form["gender"],
                 store=request.form["store"],
             )
+            flash("登録完了しました！！")
             return render_template("index.html")
-        except IntegrityError as e:
+        except IndentationError as e:
             flash(f"{e}")
     return render_template("register.html")
 
 
-# ログインフォームの表示・ログイン処理
+# ログインフォームの表示
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        # データの検証
         if not request.form["password"] or not request.form["email"]:
-            flash("未入力の項目があります。")
+            flash("※未入力の項目があります※")
             return redirect(request.url)
-
         # ここでユーザーを認証し、OKならログインする
         user = User.select().where(User.email == request.form["email"]).first()
         if user is not None and check_password_hash(user.password, request.form["password"]):
             login_user(user)
-            flash(f" {user.name} さんHello!!")
-            return render_template("selection.html")
-            # return redirect(url_for("login"))
-        # NGならフラッシュメッセージを設定
-        flash("認証に失敗しました")
-    return render_template("selection.html")
-    # return render_template("login.html")
+            flash(f"{user.name} さん ログイン中")
+            return redirect(url_for("index"))
+
+    return render_template("login.html")
 
 
 # ログアウト処理
 @app.route("/logout")
 @login_required
 def logout():
+    # ログインしていない場合の処理
+    if not current_user.is_authenticated:
+        return "ログインしていません"
     logout_user()
     flash("ログアウトしました！")
     return redirect(url_for("index"))
@@ -94,6 +91,7 @@ def unregister():
     return redirect(url_for("index"))
 
 
+# メッセージ登録フォームの表示・投稿・一覧表示
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST" and current_user.is_authenticated:
@@ -130,6 +128,7 @@ def show(message_id):
     )
     if messages.count() == 0:
         return redirect(url_for("index"))
+    return render_template("show.html", messages=messages, message_id=message_id)
 
 
 # 返信登録
@@ -138,11 +137,6 @@ def show(message_id):
 def reply(message_id):
     Message.create(user=current_user, content=request.form["content"], reply_to=message_id)
     return redirect(url_for("show", message_id=message_id))
-
-
-@app.route("/selection")
-def selection():
-    return render_template("selection.html")
 
 
 if __name__ == "__main__":

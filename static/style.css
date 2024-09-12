@@ -1,8 +1,13 @@
 @charset "UTF-8";
 
 body {
-    font-family: sans-serif;
-    background-image: url('/ra-men.jpg');  
+    font-family: "Noto Sans JP", system-ui;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+    background: #736b6b;
+    /* background-image: url(images/bg.png);
+    background-image: url(/Users/mikirupan/camp/image/ramenPAR574482518_TP_V.jpg); */
 }
 
 a:link,
@@ -15,14 +20,16 @@ a,
 h1,
 h2 {
     color: #377BA8;
+    margin: 0 auto; /* 中央寄せ */
 }
 
 h1,
 h2 {
-    font-family: 'Arial', 'ヒラギノ角ゴ Pro W3', '游ゴシック', sans-serif;
     margin: 0;
     font-weight: bold; /* 太字に設定 */
     color: black; /* テキストの色を黒に設定 */
+    margin: 0 auto; /* 中央寄せ */
+
 }
 
 h1 {
@@ -43,9 +50,9 @@ h2 {
 }
 
 .page form {
-    padding-inline-start: 40px;
+    padding-inline-start: 4px;
     padding-inline-end: 40px;
-    margin-bottom: 30px;
+    margin-bottom: 4px;
 }
 
 .page form * :not(button) {
@@ -65,7 +72,7 @@ h2 {
     font-size: 0.8em;
     padding: 0.3em;
     margin-bottom: 1em;
-    background: #fafafa;
+    background: red;
 }
 
 .flash {

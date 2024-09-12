@@ -6,22 +6,24 @@
     <title>MessageBOX</title>
     <link rel=stylesheet href="{{ url_for('static', filename='style.css') }}">
 </head>
-
+<header>
+    {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div>
+    {% endfor %}
+</header>
 <body>
     <div class="page">
-        <h1><a href="{{ url_for('index') }}">二郎ッター</a></h1>
+        <h1><a href="{{ url_for('index') }}">ピースとハイライト</a></h1>
         <div class="metanav">
             {% if not current_user.is_authenticated %}
-                <button class="btn"><a href="{{ url_for('login') }}">ログイン</a></button>
-                <button class="btn"><a href="{{ url_for('register') }}">新規登録</a></button>
+                <a href="{{ url_for('login') }}">ログイン</a>
+                <a href="{{ url_for('register') }}">新規登録</a>
             {% else %}
                 <a href="{{ url_for('unregister') }}" onclick="if(!confirm('本当に削除していいですか？')) return false">退会</a>
                 <a href="{{ url_for('logout') }}">ログアウト</a>
             {% endif %}
         </div>
-        {% for message in get_flashed_messages() %}
-            <div class="flash">{{ message }}</div>
-        {% endfor %}
+        
 
         {% block content %}{% endblock %}
     </div>
