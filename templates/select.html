@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>天気予報</h1>
+    <form action="{{ url_for('select') }}" method="post">
+        <label for="prefecture">都道府県:</label>
+        <select name="prefecture" id="prefecture">
+            {% for prefecture in prefectures %}
+            <option value="{{ prefecture.name }}">{{ prefecture.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="取得">
+    </form>
+
+    {% if weather_data %}
+    <h2>天気予報</h2>
+    <ul>
+        {% for item in weather_data %}
+        <li class="weather-item">
+            <div class="weather-date">{{ item.date }}</div>
+            <div class="weather-description">{{ item.weather }}</div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endblock %}

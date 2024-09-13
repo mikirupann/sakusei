@@ -2,7 +2,9 @@ from flask import Flask, flash, redirect, render_template, request, url_for
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from peewee import IntegrityError
-from config import User, Message
+from config import User, Message, Prefecture
+import requests
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -137,6 +139,42 @@ def show(message_id):
 def reply(message_id):
     Message.create(user=current_user, content=request.form["content"], reply_to=message_id)
     return redirect(url_for("show", message_id=message_id))
+
+
+@app.route("/select", methods=["GET", "POST"])
+def select():
+    prefectures = Prefecture.select()  # 全都道府県を取得
+    weather_data = None
+    if request.method == "POST":
+        prefecture = request.form["prefecture"]
+        prefecture = Prefecture.get(Prefecture.name == prefecture)
+        code = prefecture.area_code
+
+        # 気象庁APIから天気データを取得
+        jma_url = f"https://www.jma.go.jp/bosai/forecast/data/forecast/{code}.json"
+        response = requests.get(jma_url)
+        response.raise_for_status()
+        jma_json = response.json()
+
+        # 日付データの取得
+        time = jma_json[0]["timeSeries"][0]["timeDefines"]
+        # 天気データの取得
+        jma_weather = jma_json[0]["timeSeries"][0]["areas"][0]["weathers"]
+        jma_weather = jma_weather.replace('　', '')
+
+        # "今日", "明日", "明後日"の対応付け
+        days = ["今日", "明日", "明後日"]
+
+        # 天気データの整形
+        weather_data = []
+        for i, (date, weather) in enumerate(zip(time, jma_weather)):
+            formatted_date = datetime.fromisoformat(date).strftime("%m/%d")
+            weather_data.append({
+                "date": f"{days[i]} ({formatted_date})",
+                "weather": weather
+            })
+
+    return render_template("select.html", prefectures=prefectures, weather_data=weather_data)
 
 
 if __name__ == "__main__":

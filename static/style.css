@@ -47,6 +47,7 @@ h2 {
     border: 5px solid #ccc;
     padding: 0.8em;
     background: #ffd900;
+    
 }
 
 .page form {
@@ -70,7 +71,6 @@ h2 {
 .metanav {
     text-align: right;
     font-size: 0.8em;
-    padding: 0.3em;
     margin-bottom: 1em;
     background: red;
 }
@@ -107,8 +107,25 @@ nav {
     margin-left: auto;
 }
 
-.tubuyaki {
-    width: 100%; /* 80%の幅に設定 */
-    max-width: 700px; /* 最大幅を600pxに設定 */
-    margin: 0 auto; /* 中央寄せ */
+
+
+.eat {
+    border-style: outset;
+    float: right;
 }
+
+.eat1 {
+    padding: 10px;
+    border-style: outset;
+    float: left;
+}
+
+.weather-item {
+            margin-bottom: 1em;
+        }
+.weather-date {
+            font-weight: bold;
+        }
+.weather-description {
+            margin-left: 1em;
+        }

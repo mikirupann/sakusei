@@ -32,5 +32,16 @@ class Message(Model):
         table_name = "messages"
 
 
-db.create_tables([User, Message])
+# 都道府県モデルの定義
+class Prefecture(Model):
+    id = IntegerField(primary_key=True)
+    name = CharField(unique=True)  # 都道府県名
+    area_code = CharField(unique=True)  # 気象庁のエリアコード
+
+    class Meta:
+        database = db
+        table_name = "prefectures"
+
+
+db.create_tables([User, Message, Prefecture])
 db.pragma("foreign_keys", 1, permanent=True)  # on_deleteを動作させるオプション設定を追加

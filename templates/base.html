@@ -19,8 +19,17 @@
                 <a href="{{ url_for('login') }}">ログイン</a>
                 <a href="{{ url_for('register') }}">新規登録</a>
             {% else %}
-                <a href="{{ url_for('unregister') }}" onclick="if(!confirm('本当に削除していいですか？')) return false">退会</a>
-                <a href="{{ url_for('logout') }}">ログアウト</a>
+                <div class="eat1">
+                    <a href="{{ url_for('select') }}">食べる</a>
+                </div>
+                <div class="eat">
+                    <a href="{{ url_for('unregister') }}" onclick="if(!confirm('本当に削除していいですか？')) return false">退会</a>
+                </div>
+                <div class="eat">
+                    <a href="{{ url_for('logout') }}">ログアウト</a>
+                </div>
+                
+                
             {% endif %}
         </div>
         

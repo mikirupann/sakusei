@@ -1,27 +1,24 @@
 import requests
-from datetime import datetime
+import json
+from pprint import pprint
 
-# 気象庁データの取得
-area = "040000"  # 宮城県のエリアコード
-jma_url = f"https://www.jma.go.jp/bosai/forecast/data/forecast/{area}.json"
+url = "https://api.openweathermap.org/data/2.5/weather?zip={zip_place}&units=metric&appid={API_key}"
+# xxxxx
+url = url.format(zip_place="982-0033,JP", API_key="36b9d8939fe02ceeb259f6e9927873ec")
 
+jsondata = requests.get(url).json()
+pprint(jsondata)
 
-# 気象庁データの取得
-response = requests.get(jma_url)
-response.raise_for_status()
-jma_json = response.json()
+print("天気：", jsondata["weather"][0]["main"])
+print("天気詳細：", jsondata["weather"][0]["description"])
 
+print("都市名：", jsondata["name"])
+print("気温：", jsondata["main"]["temp"])
+print("体感気温：", jsondata["main"]["feels_like"])
+print("最低気温：", jsondata["main"]["temp_min"])
+print("最高気温：", jsondata["main"]["temp_max"])
+print("気圧：", jsondata["main"]["pressure"])
+print("湿度：", jsondata["main"]["humidity"])
 
-# 日付データの取得
-time = jma_json[0]["timeSeries"][0]["timeDefines"]
-# 天気データの取得
-jma_weather = jma_json[0]["timeSeries"][0]["areas"][0]["weathers"]
-
-# "今日", "明日", "明後日"の対応付け
-days = ["今日", "明日", "明後日"]
-
-for i, (date, weather) in enumerate(zip(time, jma_weather)):
-    # 日付を月と日のみのフォーマットで表示
-    formatted_date = datetime.fromisoformat(date).strftime("%m月%d日")
-    tenki = f"{days[i]} ({formatted_date}): {weather}"
-    print(f"{days[i]} ({formatted_date}): {weather}")
+print("風速：", jsondata["wind"]["speed"])
+print("風の方角：", jsondata["wind"]["deg"])
