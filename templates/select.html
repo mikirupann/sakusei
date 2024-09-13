@@ -2,24 +2,20 @@
 {% block content %}
 <h1>天気予報</h1>
     <form action="{{ url_for('select') }}" method="post">
-        <label for="prefecture">都道府県:</label>
+        <label for="prefecture">行きたい店舗: </label>
         <select name="prefecture" id="prefecture">
             {% for prefecture in prefectures %}
             <option value="{{ prefecture.name }}">{{ prefecture.name }}</option>
             {% endfor %}
         </select>
-        <input type="submit" value="取得">
+        <input type="submit" value="天気表示">
     </form>
 
     {% if weather_data %}
-    <h2>天気予報</h2>
-    <ul>
-        {% for item in weather_data %}
-        <li class="weather-item">
-            <div class="weather-date">{{ item.date }}</div>
-            <div class="weather-description">{{ item.weather }}</div>
-        </li>
-        {% endfor %}
-    </ul>
+        <h2>天気情報</h2>
+        <p>天気: {{ weather_data.weather }}</p>
+        <p>詳細: {{ weather_data.description }}</p>
+        <p>都市名: {{ weather_data.city }}</p>
+        <p>気温: {{ weather_data.temp }} °C</p>
     {% endif %}
 {% endblock %}

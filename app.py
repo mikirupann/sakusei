@@ -4,7 +4,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from peewee import IntegrityError
 from config import User, Message, Prefecture
 import requests
-from datetime import datetime
+from dotenv import load_dotenv
+import os
+from translate import Translator
+
+load_dotenv()
+api_key = os.getenv("API_key")
 
 
 app = Flask(__name__)
@@ -141,38 +146,33 @@ def reply(message_id):
     return redirect(url_for("show", message_id=message_id))
 
 
+def translate_text(text, target_lang="ja"):
+    translator = Translator(to_lang=target_lang)
+    return translator.translate(text)
+
+
 @app.route("/select", methods=["GET", "POST"])
 def select():
     prefectures = Prefecture.select()  # 全都道府県を取得
     weather_data = None
     if request.method == "POST":
         prefecture = request.form["prefecture"]
+
         prefecture = Prefecture.get(Prefecture.name == prefecture)
         code = prefecture.area_code
 
-        # 気象庁APIから天気データを取得
-        jma_url = f"https://www.jma.go.jp/bosai/forecast/data/forecast/{code}.json"
-        response = requests.get(jma_url)
+        url = f"https://api.openweathermap.org/data/2.5/weather?zip={code}&units=metric&appid={api_key}"
+        response = requests.get(url)
         response.raise_for_status()
-        jma_json = response.json()
+        jsondata = response.json()
 
-        # 日付データの取得
-        time = jma_json[0]["timeSeries"][0]["timeDefines"]
-        # 天気データの取得
-        jma_weather = jma_json[0]["timeSeries"][0]["areas"][0]["weathers"]
-        jma_weather = jma_weather.replace('　', '')
-
-        # "今日", "明日", "明後日"の対応付け
-        days = ["今日", "明日", "明後日"]
-
-        # 天気データの整形
-        weather_data = []
-        for i, (date, weather) in enumerate(zip(time, jma_weather)):
-            formatted_date = datetime.fromisoformat(date).strftime("%m/%d")
-            weather_data.append({
-                "date": f"{days[i]} ({formatted_date})",
-                "weather": weather
-            })
+        # 必要な天気データの抽出
+        weather_data = {
+            "weather": translate_text(jsondata["weather"][0]["main"]),
+            "description": translate_text(jsondata["weather"][0]["description"]),
+            "city": translate_text(jsondata["name"]),
+            "temp": jsondata["main"]["temp"],
+        }
 
     return render_template("select.html", prefectures=prefectures, weather_data=weather_data)
 

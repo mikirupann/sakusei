@@ -36,7 +36,7 @@ class Message(Model):
 class Prefecture(Model):
     id = IntegerField(primary_key=True)
     name = CharField(unique=True)  # 都道府県名
-    area_code = CharField(unique=True)  # 気象庁のエリアコード
+    area_code = CharField()  # 〒
 
     class Meta:
         database = db
