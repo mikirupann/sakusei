@@ -7,9 +7,13 @@ import requests
 from dotenv import load_dotenv
 import os
 from translate import Translator
+import googlemaps
+import geocoder
+import math
 
 load_dotenv()
-api_key = os.getenv("API_key")
+weather_api_key = os.getenv("weather_API_key")
+map_api_key = os.getenv("map_API_key")
 
 
 app = Flask(__name__)
@@ -153,28 +157,69 @@ def translate_text(text, target_lang="ja"):
 
 @app.route("/select", methods=["GET", "POST"])
 def select():
-    prefectures = Prefecture.select()  # 全都道府県を取得
+    prefectures = Prefecture.select()  # 全都道府県テーブル取得
     weather_data = None
+    distance = None
+    address = None
     if request.method == "POST":
         prefecture = request.form["prefecture"]
-
         prefecture = Prefecture.get(Prefecture.name == prefecture)
         code = prefecture.area_code
-
-        url = f"https://api.openweathermap.org/data/2.5/weather?zip={code}&units=metric&appid={api_key}"
+        url = (
+            f"https://api.openweathermap.org/data/2.5/weather?zip={code}&units=metric&appid={weather_api_key}"
+        )
         response = requests.get(url)
-        response.raise_for_status()
+        # response.raise_for_status()
         jsondata = response.json()
 
-        # 必要な天気データの抽出
+        # 天気データ
         weather_data = {
             "weather": translate_text(jsondata["weather"][0]["main"]),
             "description": translate_text(jsondata["weather"][0]["description"]),
-            "city": translate_text(jsondata["name"]),
+            "city": (jsondata["name"]),
             "temp": jsondata["main"]["temp"],
         }
 
-    return render_template("select.html", prefectures=prefectures, weather_data=weather_data)
+        # GoogleMapsAPIキーを設定APIキー
+        gmaps = googlemaps.Client(key=map_api_key)
+        # 緯度経度を取得
+        address = f"ラーメン二郎 {prefecture.name}"
+        geocode_result = gmaps.geocode(address)
+        if geocode_result:
+            location = geocode_result[0]["geometry"]["location"]
+            lat = location["lat"]
+            lng = location["lng"]
+            koko = [lat, lng]
+        else:
+            flash(f"住所が見つかりませんでした。")
+
+        # IPアドレスから位置情報を取得
+        g = geocoder.ip("me")
+        me = [g.latlng[0], g.latlng[1]]
+        pole_radius = 6356752.314245  # 極半径
+        equator_radius = 6378137.0  # 赤道半径
+        lat_me = math.radians(me[0])
+        lon_me = math.radians(me[1])
+        lat_koko = math.radians(koko[0])
+        lon_koko = math.radians(koko[1])
+        lat_difference = lat_me - lat_koko  # 緯度差
+        lon_difference = lon_me - lon_koko  # 経度差
+        lat_average = (lat_me + lat_koko) / 2  # 平均緯度
+        e2 = (math.pow(equator_radius, 2) - math.pow(pole_radius, 2)) / math.pow(
+            equator_radius, 2
+        )  # 第一離心率^2
+
+        w = math.sqrt(1 - e2 * math.pow(math.sin(lat_average), 2))
+        m = equator_radius * (1 - e2) / math.pow(w, 3)  # 子午線曲率半径
+        n = equator_radius / w  # 卯酉線曲半径
+        distance = math.sqrt(
+            math.pow(m * lat_difference, 2) + math.pow(n * lon_difference * math.cos(lat_average), 2)
+        )  # 距離計測
+        distance = round(distance / 1000, 1)
+
+    return render_template(
+        "select.html", prefectures=prefectures, weather_data=weather_data, distance=distance, address=address
+    )
 
 
 if __name__ == "__main__":

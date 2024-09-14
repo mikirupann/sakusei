@@ -1,21 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>天気予報</h1>
+<button onclick="history.back()" class="back-button">戻る</button>
+<h1>二郎サーチ</h1>
     <form action="{{ url_for('select') }}" method="post">
-        <label for="prefecture">行きたい店舗: </label>
+        <h2><label for="prefecture">行きたい店舗: </label></h2>
         <select name="prefecture" id="prefecture">
             {% for prefecture in prefectures %}
             <option value="{{ prefecture.name }}">{{ prefecture.name }}</option>
             {% endfor %}
         </select>
-        <input type="submit" value="天気表示">
+        <input type="submit" value="表示">
     </form>
 
     {% if weather_data %}
-        <h2>天気情報</h2>
+        <h2>{{ request.form["prefecture"] }}の天気情報</h2>
         <p>天気: {{ weather_data.weather }}</p>
         <p>詳細: {{ weather_data.description }}</p>
         <p>都市名: {{ weather_data.city }}</p>
         <p>気温: {{ weather_data.temp }} °C</p>
+    {% endif %}
+    <br>
+    {% if  distance %}
+        {% if  address %}
+            <h2>ここから{{ address }}の直線距離</h2>
+        {% endif %}
+        <p>約{{ distance }}km</p>
     {% endif %}
 {% endblock %}

@@ -1,14 +1,19 @@
-import requests
-import json
+import hashlib
+from urllib.parse import urlencode
 
-code = "070000"
-jma_url = f"https://www.jma.go.jp/bosai/forecast/data/forecast/{code}.json"
-response = requests.get(jma_url)
-response.raise_for_status()
-jma_json = response.json()
-# 日付データの取得
-time = jma_json[0]["timeSeries"][0]["timeDefines"]
-# 天気データの取得
-jma_weather = jma_json[0]["timeSeries"][0]["areas"][0]["weathers"]
-jma_weather = jma_weather.replace("　", "")
-print(jma_weather)
+# Set your variables here
+email = "someone@somewhere.com"
+default = "https://www.example.com/default.jpg"
+size = 40
+
+# Encode the email to lowercase and then to bytes
+email_encoded = email.lower().encode("utf-8")
+
+# Generate the SHA256 hash of the email
+email_hash = hashlib.sha256(email_encoded).hexdigest()
+
+# Construct the URL with encoded query parameters
+query_params = urlencode({"d": default, "s": str(size)})
+gravatar_url = f"https://www.gravatar.com/avatar/{email_hash}?{query_params}"
+
+print(gravatar_url)

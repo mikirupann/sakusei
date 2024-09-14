@@ -72,7 +72,6 @@ h2 {
     text-align: right;
     font-size: 0.8em;
     margin-bottom: 1em;
-    background: red;
 }
 
 .flash {
@@ -118,14 +117,30 @@ nav {
     padding: 10px;
     border-style: outset;
     float: left;
+    display: block;
 }
 
 .weather-item {
             margin-bottom: 1em;
         }
+
 .weather-date {
             font-weight: bold;
         }
+
 .weather-description {
             margin-left: 1em;
         }
+
+.back-button {
+    position: fixed;  /* 画面の特定の位置に固定 */
+    bottom: 20px;     /* 画面下から20pxの位置 */
+    right: 20px;      /* 画面右から20pxの位置 */
+    background-color: #4CAF50;  /* ボタンの背景色 */
+    color: white;     /* テキストの色 */
+    padding: 10px 20px; /* パディングの設定 */
+    border: none;     /* ボーダーなし */
+    border-radius: 5px;  /* 角を丸める */
+    cursor: pointer;  /* ポインタを変更 */
+    font-size: 16px;  /* テキストのサイズ */
+}
