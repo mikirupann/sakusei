@@ -13,11 +13,18 @@
     </form>
 
     {% if weather_data %}
-        <h2>{{ request.form["prefecture"] }}の天気情報</h2>
-        <p>天気: {{ weather_data.weather }}</p>
-        <p>詳細: {{ weather_data.description }}</p>
-        <p>都市名: {{ weather_data.city }}</p>
-        <p>気温: {{ weather_data.temp }} °C</p>
+    <div class="container">
+            <h2>{{ request.form["prefecture"] }}の天気情報</h2>
+        <div class="item">
+            <p>天気: {{ weather_data.weather }}</p>
+        </div>
+        <div class="item">
+            <p>都市名: {{ weather_data.city }}</p>
+        </div>
+        <div class="item">
+            <p>気温: {{ weather_data.temp }} °C</p>
+        </div>
+    </div>
     {% endif %}
     <br>
     {% if  distance %}

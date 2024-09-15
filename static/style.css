@@ -114,10 +114,10 @@ nav {
 }
 
 .eat1 {
-    padding: 10px;
     border-style: outset;
     float: left;
     display: block;
+    background-color: #4CAF50;
 }
 
 .weather-item {
@@ -143,4 +143,16 @@ nav {
     border-radius: 5px;  /* 角を丸める */
     cursor: pointer;  /* ポインタを変更 */
     font-size: 16px;  /* テキストのサイズ */
+}
+
+.container {
+    display: flex;
+}
+
+.item {
+    background: rgb(144, 197, 29);
+    color: rgb(3, 55, 10);
+    margin: 10px;
+    padding: 10px;
+
 }

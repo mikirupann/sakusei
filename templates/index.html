@@ -2,23 +2,25 @@
 {% block content %}
     <br>
     {% if current_user.is_authenticated %}  {# ログインしている場合に表示 #}
-        <h2>Create</h2>
-
+<br>
         <form action="{{ url_for('index') }}" method="post">
-            <label for="prefecture">都道府県:</label>
+            <label for="prefecture">現在並んでいる店舗:</label>
+            <br>
             <select name="prefecture" id="prefecture">
                 {% for prefecture in prefectures %}
-                <option value="{{ prefecture.name }}">{{ prefecture.name }}</option>
+                    <option value="{{ prefecture.name }}">{{ prefecture.name }}</option>
                 {% endfor %}
             </select>
-
+            <br>
             <br>
             <label for="message">Message:</label>
             <br>
-            <textarea name="content" id="message" placeholder="今の気分はいかがですか？"></textarea>
+            <textarea name="content" id="message" placeholder="混雑状況はどうですか？(例:現在10人待ち)"></textarea>
             <br>
             <input type="submit" value="作成" />
+            
         </form>
+        <br>
     {% endif %}
 
     <h2>一覧</h2>
@@ -29,7 +31,6 @@
                 <img src="http://www.gravatar.com/avatar/{{ message.user.email }}?d=identicon&s=80" alt=""
                     class="avatar">
                 {{ message.user.name }}さん {{ message.pub_date }}
-                
                 {% if message.user == current_user %}
                     <form action="{{ url_for('delete', message_id=message.id) }}" method="post" style="display:inline;">
                         <input type="submit" value="削除" onclick="if(!confirm('このメッセージを削除しますか？')) return false">

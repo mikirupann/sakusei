@@ -105,6 +105,10 @@ def unregister():
 # メッセージ登録フォームの表示・投稿・一覧表示
 @app.route("/", methods=["GET", "POST"])
 def index():
+    prefectures = Prefecture.select()
+    if request.method == "POST":
+        prefecture = request.form["prefecture"]
+        prefecture = Prefecture.get(Prefecture.name == prefecture)
     if request.method == "POST" and current_user.is_authenticated:
         if not request.form["content"]:
             flash("Message を入力してください")
@@ -115,7 +119,7 @@ def index():
         .where(Message.reply_to.is_null(True))
         .order_by(Message.pub_date.desc(), Message.id.desc())
     )
-    return render_template("index.html", messages=messages)
+    return render_template("index.html", messages=messages, prefectures=prefectures)
 
 
 # メッセージ削除
@@ -175,7 +179,6 @@ def select():
         # 天気データ
         weather_data = {
             "weather": translate_text(jsondata["weather"][0]["main"]),
-            "description": translate_text(jsondata["weather"][0]["description"]),
             "city": (jsondata["name"]),
             "temp": jsondata["main"]["temp"],
         }
